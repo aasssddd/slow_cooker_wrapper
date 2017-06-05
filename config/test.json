@@ -1,0 +1,44 @@
+{
+    "influx_db": {
+        "influx_host": "http://localhost:8086",
+        "user": "root",
+        "password": "root",
+        "db": "slow-cooker"
+    },
+    "jobs": [{
+        "title": "step 1",
+        "description": "warming",
+        "host": "http://localhost:8080",
+        "qps": 100,
+        "concurrency": 10,
+        "method": "GET",
+        "interval": "1s",
+        "noreues": true,
+        "compress": false,
+        "noLatencySummary": false,
+        "reportLatenciesCSV": "$HOME/loadtest/report",
+        "totalRequests": 1000,
+        "header": [{
+            "Content-Type": "application/json"
+        }, {
+            "Cache-Control": "no-cache"
+        }],
+        "run_order": 1
+    }, {
+        "title": "step 2",
+        "description": "load testing",
+        "host": "http://localhost:8080",
+        "qps": 100,
+        "concurrency": 10,
+        "method": "GET",
+        "interval": "100ms",
+        "noreues": false,
+        "compress": false,
+        "noLatencySummary": true,
+        "totalRequests": 100000,
+        "header": [{
+            "Content-Type": "application/json"
+        }],
+        "run_order": 2
+    }]
+}
