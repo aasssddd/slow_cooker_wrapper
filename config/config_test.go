@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/hyperpilotio/slow_cook_wrapper/utils"
+	"github.com/hyperpilotio/slow_cooker_wrapper/utils"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestConfig(t *testing.T) {
 	var conf Config = ViperConfig{}
-	var tfpath = "../config.json"
+	var tfpath = "./test.json"
 
 	err := conf.LoadConfig(&tfpath)
 	assert.NoError(t, err, "suppose no error")

@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"os"
 	"path"
 	"strings"
@@ -31,6 +30,6 @@ func (c ViperConfig) LoadConfig(vfile *string) error {
 
 // Get : get generic property value
 func (c ViperConfig) Get(key string) interface{} {
-	fmt.Println("all keys", viper.AllKeys())
+	// fmt.Println(viper.AllKeys())
 	return viper.Get(key)
 }

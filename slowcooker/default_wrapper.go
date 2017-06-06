@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/hyperpilotio/slow_cook_wrapper/utils"
+	"github.com/hyperpilotio/slow_cooker_wrapper/utils"
 )
 
 var wg sync.WaitGroup
@@ -36,6 +36,11 @@ type Parameter struct {
 	HashSampleRate     float64
 	HashValue          uint64
 	MetricAddr         string
+	UsePrometheus      bool
+	UseInfluxDB        bool
+	InfluxUserName     string
+	InfluxPassword     string
+	InfluxDatabase     string
 }
 
 // CommandArray : convert parameter into slow cooker's command string
@@ -101,6 +106,15 @@ func (p Parameter) CommandArray() []string {
 	if p.HashValue > uint64(0) {
 		result = append(result, "-hashValue")
 		result = append(result, string(p.HashValue))
+	}
+	if p.UseInfluxDB {
+		result = append(result, "-use-influxdb")
+		result = append(result, "-influx-username")
+		result = append(result, p.InfluxUserName)
+		result = append(result, "-influx-password")
+		result = append(result, p.InfluxPassword)
+		result = append(result, "-influx-database")
+		result = append(result, p.InfluxDatabase)
 	}
 
 	result = append(result, p.Target)

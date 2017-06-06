@@ -10,7 +10,7 @@
             "name": "db-2",
             "host": "http://172.17.0.3:8086",
             "user": "r1",
-            "password": "r2"
+            "password": "p1"
         }
     ],
     "jobs": [{
@@ -40,7 +40,7 @@
         "noLatencySummary": true,
         "totalRequests": 1000,
         "runOrder": 1,
-        "database": "db-2",
+        "database": "db-2"
     },
     {
         "title": "step 2.1",
