@@ -1,44 +1,82 @@
 {
-    "influx_db": {
-        "influx_host": "http://localhost:8086",
-        "user": "root",
-        "password": "root",
-        "db": "slow-cooker"
-    },
+    "influxDB": [
+        {
+            "name": "db-1",
+            "host": "http://localhost:8086",
+            "user": "root",
+            "password": "root",
+            "database": "metrics"
+        }, {
+            "name": "db-2",
+            "host": "http://172.17.0.3:8086",
+            "user": "r1",
+            "password": "r2"
+        }
+    ],
     "jobs": [{
-        "title": "step 1",
+        "title": "step 1a",
         "description": "warming",
-        "host": "http://localhost:8080",
+        "target": "http://localhost:8080",
         "qps": 100,
-        "concurrency": 10,
+        "concurrency": 1,
         "method": "GET",
         "interval": "1s",
         "noreues": true,
         "compress": false,
-        "noLatencySummary": false,
-        "reportLatenciesCSV": "$HOME/loadtest/report",
+        "noLatencySummary": true,
         "totalRequests": 1000,
-        "header": [{
-            "Content-Type": "application/json"
-        }, {
-            "Cache-Control": "no-cache"
-        }],
-        "run_order": 1
+        "runOrder": 1,
+        "metricsServerBackend": "influxdb",
+        "database": "db-1"
     }, {
-        "title": "step 2",
-        "description": "load testing",
-        "host": "http://localhost:8080",
+        "title": "step 1b",
+        "description": "warming",
+        "target": "http://localhost:8080",
         "qps": 100,
-        "concurrency": 10,
+        "concurrency": 1,
         "method": "GET",
-        "interval": "100ms",
+        "interval": "1s",
         "noreues": false,
         "compress": false,
         "noLatencySummary": true,
-        "totalRequests": 100000,
-        "header": [{
-            "Content-Type": "application/json"
-        }],
-        "run_order": 2
+        "totalRequests": 1000,
+        "runOrder": 1,
+        "metricsServerBackend": "influxdb",
+        "database": "db-2"
+    },
+    {
+        "title": "step 2.1",
+        "description": "load testing",
+        "target": "http://localhost:8080",
+        "qps": 100,
+        "concurrency": 1,
+        "method": "GET",
+        "interval": "1s",
+        "noreues": true,
+        "compress": false,
+        "noLatencySummary": true,
+        "totalRequests": 1000,
+        "runOrder": 2,
+        "metricAddr": "localhost:8083",
+        "metricsServerBackend": "influxdb",
+        "influxUserName": "root",
+        "influxPassword": "root",
+        "influxDatabase": "metrics2_1"
+    }, {
+        "title": "step 2.2",
+        "description": "load testing",
+        "target": "http://localhost:8080",
+        "qps": 100,
+        "concurrency": 1,
+        "method": "GET",
+        "interval": "1s",
+        "noreues": false,
+        "compress": false,
+        "noLatencySummary": true,
+        "totalRequests": 1000,
+        "metricsServerBackend": "influxdb",
+        "runOrder": 2,
+        "database": "db-1",
+        "influxDatabase": "metrics2_2"
     }]
 }

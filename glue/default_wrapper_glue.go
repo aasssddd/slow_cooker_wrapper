@@ -125,12 +125,15 @@ func loadJobConfig(c config.Config, db *[]interface{}, result *[]interface{}) {
 		if v, ok := ins["totalRequests"].(float64); ok {
 			p.TotalRequests = int(v)
 		}
-
-		if database, ok := ins["database"].(string); ok {
+		if metricsServerBackend, ok := ins["metricsServerBackend"].(string); ok {
+			if metricsServerBackend != "" {
+				p.MetricServerBackend = metricsServerBackend
+			}
+		}
+		if database, ok := ins["database"].(string); ok && p.MetricServerBackend != "" {
 			dbc := utils.First(*db, func(arg2 interface{}) bool {
 				return arg2.(dbconfig).Name == database
 			}).(dbconfig)
-			p.UseInfluxDB = true
 			p.InfluxUserName = dbc.User
 			p.InfluxPassword = dbc.Password
 			p.InfluxDatabase = dbc.Database
@@ -147,15 +150,13 @@ func loadJobConfig(c config.Config, db *[]interface{}, result *[]interface{}) {
 		if influxPassword, ok := ins["influxPassword"].(string); ok {
 			p.InfluxPassword = influxPassword
 		}
-		if useInflux, ok := ins["useInflux"].(bool); ok {
-			p.UseInfluxDB = useInflux
-		}
 
 		*result = append(*result, p)
 		return arg2
 	})
 }
 
+// Convert generic type []interface{} into type slowcooker.Parameters
 func Convert(i *[]interface{}) slowcooker.Parameters {
 	var params slowcooker.Parameters
 	for _, p := range *i {

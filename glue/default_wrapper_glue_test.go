@@ -18,7 +18,7 @@ func TestDefaultWrapperGlue(t *testing.T) {
 		return arg2.(slowcooker.Parameter).Title == "step 1a"
 	})
 
-	assert.Equal(t, true, i.(slowcooker.Parameter).UseInfluxDB, "not load properly")
+	assert.Equal(t, "influxdb", i.(slowcooker.Parameter).MetricServerBackend, "not load properly")
 	assert.Equal(t, "http://localhost:8086", i.(slowcooker.Parameter).MetricAddr, "not load properly")
 	assert.Equal(t, "root", i.(slowcooker.Parameter).InfluxUserName, "not load properly")
 	assert.Equal(t, "root", i.(slowcooker.Parameter).InfluxPassword, "not load properly")
@@ -30,6 +30,6 @@ func TestDefaultWrapperGlue(t *testing.T) {
 
 	assert.Equal(t, "", j.(slowcooker.Parameter).InfluxDatabase, "not load properly")
 	assert.Equal(t, "r1", j.(slowcooker.Parameter).InfluxUserName, "not load properly")
-	assert.Equal(t, "p1", j.(slowcooker.Parameter).InfluxPassword, "not load properly")
+	assert.Equal(t, "r2", j.(slowcooker.Parameter).InfluxPassword, "not load properly")
 	assert.Equal(t, "http://172.17.0.3:8086", j.(slowcooker.Parameter).MetricAddr, "not load properly")
 }

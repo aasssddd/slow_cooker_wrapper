@@ -18,29 +18,28 @@ var wg sync.WaitGroup
 
 // Parameter : parameter need to post to Run method
 type Parameter struct {
-	Title              string
-	Target             string
-	Qps                int
-	Concurrency        int
-	Method             string
-	Interval           string
-	Noreuses           bool
-	Compress           bool
-	NoLatencySummary   bool
-	ReportLatenciesCSV string
-	TotalRequests      int
-	Header             map[string]string
-	Host               string
-	Data               string
-	RunOrder           int
-	HashSampleRate     float64
-	HashValue          uint64
-	MetricAddr         string
-	UsePrometheus      bool
-	UseInfluxDB        bool
-	InfluxUserName     string
-	InfluxPassword     string
-	InfluxDatabase     string
+	Title               string
+	Target              string
+	Qps                 int
+	Concurrency         int
+	Method              string
+	Interval            string
+	Noreuses            bool
+	Compress            bool
+	NoLatencySummary    bool
+	ReportLatenciesCSV  string
+	TotalRequests       int
+	Header              map[string]string
+	Host                string
+	Data                string
+	RunOrder            int
+	HashSampleRate      float64
+	HashValue           uint64
+	MetricAddr          string
+	MetricServerBackend string
+	InfluxUserName      string
+	InfluxPassword      string
+	InfluxDatabase      string
 }
 
 // CommandArray : convert parameter into slow cooker's command string
@@ -58,7 +57,7 @@ func (p Parameter) CommandArray() []string {
 		result = append(result, "-compress")
 		result = append(result, "true")
 	}
-	if len(p.Data) > 0 {
+	if p.Data != "" {
 		result = append(result, "-data")
 		result = append(result, p.Data)
 	}
@@ -68,19 +67,19 @@ func (p Parameter) CommandArray() []string {
 			result = append(result, k+": "+v)
 		}
 	}
-	if len(p.Host) > 0 {
+	if p.Host != "" {
 		result = append(result, "-host")
 		result = append(result, p.Host)
 	}
-	if len(p.Interval) > 0 {
+	if p.Interval != "" {
 		result = append(result, "-interval")
 		result = append(result, p.Interval)
 	}
-	if len(p.Method) > 0 {
+	if p.Method != "" {
 		result = append(result, "-method")
 		result = append(result, strings.ToUpper(p.Method))
 	}
-	if len(p.MetricAddr) > 0 {
+	if p.MetricAddr != "" {
 		result = append(result, "-metric-addr")
 		result = append(result, p.MetricAddr)
 	}
@@ -91,7 +90,7 @@ func (p Parameter) CommandArray() []string {
 		result = append(result, "-noreuse")
 		result = append(result, "true")
 	}
-	if len(p.ReportLatenciesCSV) > 0 {
+	if p.ReportLatenciesCSV != "" {
 		result = append(result, "-reportLatenciesCSV")
 		result = append(result, p.ReportLatenciesCSV)
 	}
@@ -107,12 +106,19 @@ func (p Parameter) CommandArray() []string {
 		result = append(result, "-hashValue")
 		result = append(result, string(p.HashValue))
 	}
-	if p.UseInfluxDB {
-		result = append(result, "-use-influxdb")
+	if p.MetricServerBackend != "" {
+		result = append(result, "-metric-server-backend")
+		result = append(result, p.MetricServerBackend)
+	}
+	if p.InfluxUserName != "" {
 		result = append(result, "-influx-username")
 		result = append(result, p.InfluxUserName)
+	}
+	if p.InfluxPassword != "" {
 		result = append(result, "-influx-password")
 		result = append(result, p.InfluxPassword)
+	}
+	if p.InfluxDatabase != "" {
 		result = append(result, "-influx-database")
 		result = append(result, p.InfluxDatabase)
 	}

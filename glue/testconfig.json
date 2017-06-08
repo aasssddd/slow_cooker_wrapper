@@ -10,7 +10,7 @@
             "name": "db-2",
             "host": "http://172.17.0.3:8086",
             "user": "r1",
-            "password": "p1"
+            "password": "r2"
         }
     ],
     "jobs": [{
@@ -26,6 +26,7 @@
         "noLatencySummary": true,
         "totalRequests": 1000,
         "runOrder": 1,
+        "metricsServerBackend": "influxdb",
         "database": "db-1"
     }, {
         "title": "step 1b",
@@ -40,6 +41,7 @@
         "noLatencySummary": true,
         "totalRequests": 1000,
         "runOrder": 1,
+        "metricsServerBackend": "influxdb",
         "database": "db-2"
     },
     {
@@ -56,7 +58,7 @@
         "totalRequests": 1000,
         "runOrder": 2,
         "metricAddr": "localhost:8083",
-        "useInflux": true,
+        "metricsServerBackend": "influxdb",
         "influxUserName": "root",
         "influxPassword": "root",
         "influxDatabase": "metrics2_1"
@@ -72,6 +74,7 @@
         "compress": false,
         "noLatencySummary": true,
         "totalRequests": 1000,
+        "metricsServerBackend": "influxdb",
         "runOrder": 2,
         "database": "db-1",
         "influxDatabase": "metrics2_2"
